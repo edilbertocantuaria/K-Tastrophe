@@ -3,7 +3,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'K-Tastrophe',
-  description: 'A Caça ao k-ésimo',
+  description: 'A caça ao k-ésimo',
   icons: '/logo.png', 
 }
 

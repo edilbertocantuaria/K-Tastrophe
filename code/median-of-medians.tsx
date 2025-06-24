@@ -659,7 +659,7 @@ export default function Component() {
         <img src="/logo.png" alt="K-Tastrophe Logo" className="h-[3cm] w-[3cm] object-contain" />
         <div>
         <div className="text-4xl font-bold leading-tight" style={{ color: "#1796EE" }}>K-Tastrophe</div>
-        <div className="text-2lg font-semibold leading-snug" style={{ color: "#FDAD1E" }}>A Caça ao k-ésimo</div>
+        <div className="text-2lg font-semibold leading-snug" style={{ color: "#FDAD1E" }}>A caça ao k-ésimo</div>
         </div>
       </CardTitle>
       </div>
