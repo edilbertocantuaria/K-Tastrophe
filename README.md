@@ -7,6 +7,11 @@
   <img src="https://img.shields.io/badge/TailwindCSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="TailwindCSS" />
 </div>
 
+## 🎥 Vídeo Explicativo
+- Apresentado por Edilberto: [Clique aqui para assistir no YouTube](https://youtu.be/UYxMdEQIRCk).
+
+Neste vídeo, é feita uma explicação detalhada sobre o funcionamento do algoritmo Mediana das Medianas (Median of Medians - MOM), com foco no raciocínio por trás da implementação, nos passos do algoritmo e na comparação com o QuickSelect.
+
 ## 📋 Sobre o Projeto
 
 K-Tastrophe é uma aplicação interativa que demonstra o funcionamento do algoritmo **Mediana das Medianas (MOM)** passo a passo. O sistema permite visualizar como o algoritmo encontra o k-ésimo menor elemento, k-ésimo maior elemento ou a mediana exata de um array, comparando sua performance com o algoritmo QuickSelect tradicional.
