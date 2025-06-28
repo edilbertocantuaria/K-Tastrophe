@@ -65,7 +65,8 @@ interface RecursionNode {
 
 export default function Component() {
   const [inputArray, setInputArray] = useState("3,1,4,1,5,9,2,6,5,3,5")
-  const [k, setK] = useState(6)
+  const [k, setK] = useState<string>("")
+  const [kError, setKError] = useState("")
   const [findType, setFindType] = useState<"kth-smallest" | "kth-largest" | "median">("kth-smallest")
   const [steps, setSteps] = useState<Step[]>([])
   const [quickSelectSteps, setQuickSelectSteps] = useState<Step[]>([])
@@ -527,7 +528,7 @@ export default function Component() {
     const arr = parseArray(inputArray)
     if (arr.length === 0) return
 
-    let targetK = k
+    let targetK = parseInt(k)
     if (findType === "median") {
       targetK = Math.ceil(arr.length / 2)
     } else if (findType === "kth-largest") {
@@ -642,11 +643,13 @@ export default function Component() {
 
   useEffect(() => {
     if (findType === "median") {
-      const arr = parseArray(inputArray)
-      if (arr.length > 0) {
-        setK(Math.ceil(arr.length / 2))
-      }
+    const arr = parseArray(inputArray)
+    if (arr.length > 0) {
+        const medianK = Math.ceil(arr.length / 2)
+        setK(medianK.toString())
+        setKError("") 
     }
+  }
   }, [findType, inputArray])
 
   const currentStepData = steps[currentStep]
@@ -681,17 +684,33 @@ export default function Component() {
                 disabled={isRunning}
               />
             </div>
-            <div>
-              <Label htmlFor="k">Valor de k</Label>
-              <Input
-                id="k"
-                type="number"
-                value={findType === "median" ? Math.ceil(parseArray(inputArray).length / 2) : k}
-                onChange={(e) => setK(Number.parseInt(e.target.value) || 1)}
-                min="1"
-                disabled={isRunning || findType === "median"}
-              />
-            </div>
+              <div>
+                <Label htmlFor="k">Valor de k</Label>
+                <Input
+                  id="k"
+                  type="number"
+                  value={k}
+                  onChange={(e) => {
+                    const value = e.target.value
+                    setK(value)
+
+                    const parsed = parseInt(value)
+                    const arrLen = parseArray(inputArray).length
+
+                    if (!value || isNaN(parsed) || parsed <= 0) {
+                      setKError("Por favor, insira um valor de k válido (maior que 0).")
+                    } else if (parsed > arrLen) {
+                      setK(`${arrLen}`)
+                      setKError(`k não pode ultrapassar ${arrLen}; ajustado para ${arrLen}.`)
+                    } else {
+                      setKError("")
+                    }
+                  }}
+                  min="1"
+                  disabled={isRunning || findType === "median"}
+                />
+                {kError && <p className="text-sm text-red-600 mt-1">{kError}</p>}
+              </div>
             <div>
               <Label>Tipo de busca</Label>
               <div className="flex gap-2 mt-1">
@@ -724,7 +743,7 @@ export default function Component() {
           </div>
 
           <div className="flex gap-2 items-center flex-wrap">
-            <Button onClick={runAlgorithm} disabled={isRunning}>
+            <Button onClick={runAlgorithm} disabled={isRunning || !!kError || !k}>
               <Play className="w-4 h-4 mr-2" />
               Executar Algoritmos
             </Button>
