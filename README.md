@@ -8,6 +8,7 @@
 </div>
 
 ## 🎥 Vídeo Explicativo
+
 - Apresentado por Edilberto: [Clique aqui para assistir no YouTube](https://youtu.be/UYxMdEQIRCk).
 
 Neste vídeo, é feita uma explicação detalhada sobre o funcionamento do algoritmo Mediana das Medianas (Median of Medians - MOM), com foco no raciocínio por trás da implementação, nos passos do algoritmo e na comparação com o QuickSelect.
@@ -28,6 +29,7 @@ K-Tastrophe é uma aplicação interativa que demonstra o funcionamento do algor
 ### 🧮 Algoritmos Implementados
 
 #### Mediana das Medianas (MOM)
+
 O algoritmo Mediana das Medianas é uma técnica determinística para encontrar o k-ésimo elemento de um array com complexidade **O(n)** garantida no pior caso:
 
 1. **Divisão**: O array é dividido em grupos de 5 elementos
@@ -38,7 +40,9 @@ O algoritmo Mediana das Medianas é uma técnica determinística para encontrar 
 6. **Decisão**: Baseado nas condições de contorno, continua na partição apropriada
 
 #### QuickSelect
+
 Implementação do algoritmo QuickSelect tradicional para comparação:
+
 - **Complexidade**: O(n) no caso médio, O(n²) no pior caso
 - **Estratégia de Pivot**: Utiliza o primeiro elemento (demonstra vulnerabilidade a arrays ordenados)
 - **Particionamento**: Divide em elementos menores, iguais e maiores que o pivot
@@ -46,6 +50,7 @@ Implementação do algoritmo QuickSelect tradicional para comparação:
 ### 📊 Análise de Performance
 
 A aplicação demonstra visualmente:
+
 - **Número de comparações** realizadas por cada algoritmo
 - **Porcentagem de elementos eliminados** a cada recursão
 - **Garantia de eliminação** de pelo menos 30% dos elementos no MOM
@@ -59,6 +64,7 @@ A aplicação demonstra visualmente:
 - npm ou yarn
 
 1. Clone o repositório:
+
    ```bash
    git clone https://github.com/edilbertocantuaria/K-Tastrophe
    cd K-Tastrophe
@@ -66,30 +72,28 @@ A aplicação demonstra visualmente:
 
 2. Instale as dependências:
 
-    ```shellscript
-    npm install
-    # ou
-    yarn install
-    ```
+   ```shellscript
+   cd code
+   yarn install
+   ```
 
+3. Realizar o build do projeto:
 
-3. Execute o projeto em modo de desenvolvimento:
+   ```shellscript
+   yarn run build
+   ```
 
-    ```shellscript
-    npm run dev
-    # ou
-    yarn dev
-    ```
+4. Execute o projeto em modo de desenvolvimento:
 
+   ```shellscript
+   yarn dev
+   ```
 
-4. Acesse o aplicativo em seu navegador:
+5. Acesse o aplicativo em seu navegador:
 
-    ```plaintext
-    http://localhost:3000
-    ```
-
-
-
+   ```plaintext
+   http://localhost:3000
+   ```
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -102,14 +106,11 @@ A aplicação demonstra visualmente:
 - Shadcn/ui (componentes)
 - Lucide React (ícones)
 
-
-
 - **Algoritmos**:
 
 - Median of Medians (Determinístico)
 - QuickSelect (Probabilístico)
 - Insertion Sort (para grupos pequenos)
-
 
 ## 🎓 Uso Educacional
 
@@ -120,7 +121,6 @@ Esta aplicação é ideal para:
 - **Desenvolvedores** interessados em algoritmos determinísticos vs probabilísticos
 - **Pesquisadores** analisando comportamento de algoritmos em diferentes cenários
 
-
 ### 📚 Conceitos Abordados
 
 - Algoritmos de seleção determinísticos
@@ -130,7 +130,6 @@ Esta aplicação é ideal para:
 - Recursão e condições de parada
 - Comparação de performance algorítmica
 
-
 ## 🎮 Como Usar
 
 1. **Insira um array**: Digite números separados por vírgulas
@@ -139,7 +138,6 @@ Esta aplicação é ideal para:
 4. **Navegue pelos passos**: Use os botões "Anterior" e "Próximo"
 5. **Compare algoritmos**: Ative a comparação para ver QuickSelect
 6. **Analise resultados**: Observe as métricas de performance
-
 
 ## 📈 Exemplos de Uso
 
@@ -166,7 +164,6 @@ Contribuições são bem-vindas! Para contribuir:
 4. Faça push para a branch (`git push origin feature/nova-feature`)
 5. Abra um Pull Request
 
-
 ### 💡 Ideias para Contribuições
 
 - Implementação de outros algoritmos de seleção
@@ -175,13 +172,11 @@ Contribuições são bem-vindas! Para contribuir:
 - Suporte a diferentes tipos de dados
 - Testes automatizados para os algoritmos
 
-
 ## 🏆 Reconhecimentos
 
 - Algoritmo Median of Medians desenvolvido por Blum, Floyd, Pratt, Rivest e Tarjan (1973)
 - Interface inspirada em ferramentas educacionais modernas
 - Componentes UI baseados em Shadcn/ui
-
 
 ---
 
