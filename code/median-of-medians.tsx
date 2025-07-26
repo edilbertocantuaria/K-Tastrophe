@@ -65,8 +65,7 @@ interface RecursionNode {
 
 export default function Component() {
   const [inputArray, setInputArray] = useState("3,1,4,1,5,9,2,6,5,3,5")
-  const [k, setK] = useState<string>("")
-  const [kError, setKError] = useState("")
+  const [k, setK] = useState(6)
   const [findType, setFindType] = useState<"kth-smallest" | "kth-largest" | "median">("kth-smallest")
   const [steps, setSteps] = useState<Step[]>([])
   const [quickSelectSteps, setQuickSelectSteps] = useState<Step[]>([])
@@ -112,6 +111,7 @@ export default function Component() {
     parentNode: RecursionNode | null = null,
   ): { result: number; node: RecursionNode } => {
     operations++
+
 
     const currentNode: RecursionNode = {
       id: nodeId,
@@ -528,14 +528,13 @@ export default function Component() {
     const arr = parseArray(inputArray)
     if (arr.length === 0) return
 
-    let targetK = parseInt(k)
+    let targetK = k
     if (findType === "median") {
       targetK = Math.ceil(arr.length / 2)
     } else if (findType === "kth-largest") {
       targetK = arr.length - k + 1
     }
 
-    // Run Median of Medians
     const momSteps: Step[] = []
     momSteps.push({
       type: "divide",
@@ -552,7 +551,6 @@ export default function Component() {
 
     const lastMomStep = momSteps[momSteps.length - 1]
 
-    // Run QuickSelect for comparison
     const qsSteps: Step[] = []
     qsSteps.push({
       type: "divide",
@@ -568,9 +566,8 @@ export default function Component() {
 
     const lastQsStep = qsSteps[qsSteps.length - 1]
 
-    // Set statistics
     setMomStats({
-      name: "Median of Medians",
+      name: "Mediana das Medianas",
       steps: momSteps.length,
       comparisons: lastMomStep.comparisons || 0,
       operations: lastMomStep.operations || 0,
@@ -643,13 +640,11 @@ export default function Component() {
 
   useEffect(() => {
     if (findType === "median") {
-    const arr = parseArray(inputArray)
-    if (arr.length > 0) {
-        const medianK = Math.ceil(arr.length / 2)
-        setK(medianK.toString())
-        setKError("") 
+      const arr = parseArray(inputArray)
+      if (arr.length > 0) {
+        setK(Math.ceil(arr.length / 2))
+      }
     }
-  }
   }, [findType, inputArray])
 
   const currentStepData = steps[currentStep]
@@ -684,33 +679,17 @@ export default function Component() {
                 disabled={isRunning}
               />
             </div>
-              <div>
-                <Label htmlFor="k">Valor de k</Label>
-                <Input
-                  id="k"
-                  type="number"
-                  value={k}
-                  onChange={(e) => {
-                    const value = e.target.value
-                    setK(value)
-
-                    const parsed = parseInt(value)
-                    const arrLen = parseArray(inputArray).length
-
-                    if (!value || isNaN(parsed) || parsed <= 0) {
-                      setKError("Por favor, insira um valor de k válido (maior que 0).")
-                    } else if (parsed > arrLen) {
-                      setK(`${arrLen}`)
-                      setKError(`k não pode ultrapassar ${arrLen}; ajustado para ${arrLen}.`)
-                    } else {
-                      setKError("")
-                    }
-                  }}
-                  min="1"
-                  disabled={isRunning || findType === "median"}
-                />
-                {kError && <p className="text-sm text-red-600 mt-1">{kError}</p>}
-              </div>
+            <div>
+              <Label htmlFor="k">Valor de k</Label>
+              <Input
+                id="k"
+                type="number"
+                value={findType === "median" ? Math.ceil(parseArray(inputArray).length / 2) : k}
+                onChange={(e) => setK(Number.parseInt(e.target.value) || 1)}
+                min="1"
+                disabled={isRunning || findType === "median"}
+              />
+            </div>
             <div>
               <Label>Tipo de busca</Label>
               <div className="flex gap-2 mt-1">
@@ -743,7 +722,7 @@ export default function Component() {
           </div>
 
           <div className="flex gap-2 items-center flex-wrap">
-            <Button onClick={runAlgorithm} disabled={isRunning || !!kError || !k}>
+            <Button onClick={runAlgorithm} disabled={isRunning}>
               <Play className="w-4 h-4 mr-2" />
               Executar Algoritmos
             </Button>
@@ -775,7 +754,7 @@ export default function Component() {
       {isRunning && currentStepData && (
         <Tabs defaultValue="mom" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="mom">Median of Medians</TabsTrigger>
+            <TabsTrigger value="mom">Mediana das Medianas</TabsTrigger>
             <TabsTrigger value="quickselect">QuickSelect</TabsTrigger>
           </TabsList>
 
@@ -785,7 +764,7 @@ export default function Component() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <CardTitle className="text-lg">
-                      🏆 Median of Medians - Passo {currentStep + 1} de {steps.length}
+                      🏆 Mediana das Medianas - Passo {currentStep + 1} de {steps.length}
                     </CardTitle>
                     {currentStepData.recursionLevel !== undefined && (
                       <div className="flex items-center gap-2">
@@ -1128,7 +1107,138 @@ export default function Component() {
                   </div>
                   <CardDescription>{currentQsStepData.description}</CardDescription>
                 </CardHeader>
-                <CardContent></CardContent>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label className="text-sm font-medium">Array atual:</Label>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {currentQsStepData.array.map((num, idx) => (
+                        <Badge
+                          key={idx}
+                          variant="secondary"
+                          className={`text-sm ${currentQsStepData.pivot !== undefined && num === currentQsStepData.pivot ? "bg-orange-100 text-orange-800 border-orange-300" : ""}`}
+                        >
+                          {num}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  {currentQsStepData.pivot !== undefined && (
+                    <div>
+                      <Label className="text-sm font-medium">Pivot (Primeiro elemento):</Label>
+                      <Badge className="ml-2 text-sm bg-orange-100 text-orange-800">{currentQsStepData.pivot}</Badge>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        ⚠️ Estratégia simples: pode ser problemática para arrays ordenados
+                      </p>
+                    </div>
+                  )}
+
+                  {currentQsStepData.left && currentQsStepData.equal && currentQsStepData.right && (
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Particionamento:</Label>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                          <span className="text-sm font-semibold text-red-700">
+                            Array L (menores que {currentQsStepData.pivot}):
+                          </span>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {currentQsStepData.left.map((num, idx) => (
+                              <Badge key={idx} variant="secondary" className="text-sm bg-red-100 text-red-800">
+                                {num}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-sm font-semibold text-yellow-700">
+                            Array E (iguais a {currentQsStepData.pivot}):
+                          </span>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {currentQsStepData.equal.map((num, idx) => (
+                              <Badge key={idx} variant="secondary" className="text-sm bg-yellow-100 text-yellow-800">
+                                {num}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-sm font-semibold text-blue-700">
+                            Array R (maiores que {currentQsStepData.pivot}):
+                          </span>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {currentQsStepData.right.map((num, idx) => (
+                              <Badge key={idx} variant="secondary" className="text-sm bg-blue-100 text-blue-800">
+                                {num}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {currentQsStepData.result !== undefined && (
+                    <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                      <div className="flex items-center gap-2 mb-2">
+                        <ArrowDown className="w-5 h-5 text-orange-600" />
+                        <Label className="text-lg font-semibold text-orange-800">
+                          Resultado: {currentQsStepData.result}
+                        </Label>
+                      </div>
+                    </div>
+                  )}
+
+                  {currentQsStepData.ignoredPercentage !== undefined && (
+                    <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                      <div className="flex items-center gap-2 mb-2">
+                        <BarChart3 className="w-5 h-5 text-purple-600" />
+                        <Label className="text-lg font-semibold text-purple-800">Eficiência da Eliminação</Label>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Array original:</span>
+                          <Badge variant="outline">{parseArray(inputArray).length} elementos</Badge>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Array atual:</span>
+                          <Badge variant="outline">{currentQsStepData.array.length} elementos</Badge>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Elementos ignorados:</span>
+                          <Badge className="bg-purple-100 text-purple-800">
+                            {Math.round(
+                              ((parseArray(inputArray).length - currentQsStepData.array.length) /
+                                parseArray(inputArray).length) *
+                                100,
+                            )}
+                            % ({parseArray(inputArray).length - currentQsStepData.array.length} elementos)
+                          </Badge>
+                        </div>
+                        <div className="mt-3">
+                          <div className="flex justify-between text-xs mb-1">
+                            <span>Progresso da eliminação</span>
+                            <span>
+                              {Math.round(
+                                ((parseArray(inputArray).length - currentQsStepData.array.length) /
+                                  parseArray(inputArray).length) *
+                                  100,
+                              )}
+                              %
+                            </span>
+                          </div>
+                          <Progress
+                            value={Math.round(
+                              ((parseArray(inputArray).length - currentQsStepData.array.length) /
+                                parseArray(inputArray).length) *
+                                100,
+                            )}
+                            className="h-2"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
               </Card>
             )}
           </TabsContent>
@@ -1144,7 +1254,9 @@ export default function Component() {
               onClick={() => setShowMomTree(!showMomTree)}
             >
               <div className="flex items-center gap-2">
-                <span className="text-lg font-semibold text-blue-700">🌳🏆 Árvore de Recursão - Median of Medians</span>
+                <span className="text-lg font-semibold text-blue-700">
+                  🏆 Árvore de Recursão - Mediana das Medianas
+                </span>
               </div>
               <ChevronRight className={`w-5 h-5 transition-transform ${showMomTree ? "rotate-90" : ""}`} />
             </Button>
@@ -1165,7 +1277,7 @@ export default function Component() {
               onClick={() => setShowQsTree(!showQsTree)}
             >
               <div className="flex items-center gap-2">
-                <span className="text-lg font-semibold text-orange-700">🌳⚡ Árvore de Recursão - QuickSelect</span>
+                <span className="text-lg font-semibold text-orange-700">⚡ Árvore de Recursão - QuickSelect</span>
               </div>
               <ChevronRight className={`w-5 h-5 transition-transform ${showQsTree ? "rotate-90" : ""}`} />
             </Button>
@@ -1185,7 +1297,7 @@ export default function Component() {
         <CardContent className="space-y-4">
           <Tabs defaultValue="mom-explanation" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="mom-explanation">Median of Medians</TabsTrigger>
+              <TabsTrigger value="mom-explanation">Mediana das Medianas</TabsTrigger>
               <TabsTrigger value="qs-explanation">QuickSelect</TabsTrigger>
             </TabsList>
 

@@ -97,6 +97,9 @@ export default function RecursionTree({ tree }: RecursionTreeProps) {
   return (
     <Card>
       <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          🌳 Árvore de Recursão - {tree.id.startsWith("qs_") ? "QuickSelect" : "Median of Medians"}
+        </CardTitle>
         <div className="text-sm text-muted-foreground space-y-1">
           <div>
             • <span className="text-blue-700">🎯 Azul</span>: Chamadas principais do algoritmo
